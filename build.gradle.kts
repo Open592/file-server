@@ -24,6 +24,8 @@ repositories {
 dependencies {
   implementation(libs.clikt)
   implementation(libs.guice)
+  runtimeOnly(libs.logback)
+  implementation(libs.logger)
   implementation(libs.netty.all)
 
   testImplementation(kotlin("test"))
