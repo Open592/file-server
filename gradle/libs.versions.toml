@@ -4,8 +4,8 @@ guice = "7.0.0"
 jimfs = "1.3.0"
 junit = "5.11.0"
 kotlin = "2.0.20"
-logback = "1.5.8"
-logger = "1.0.6"
+kotlin-inline-logger = "1.0.6"
+logback-classic = "1.5.8"
 ktfmt-gradle = "0.20.1"
 mockk = "1.13.12"
 netty = "4.1.113.Final"
@@ -19,7 +19,7 @@ clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 guice = { module = "com.google.inject:guice", version.ref = "guice" }
 jimfs = { module = "com.google.jimfs:jimfs", version.ref = "jimfs" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
-logback = { module = "ch.qos.logback:logback-classic", version = "1.5.8" }
-logger = { module = "com.michael-bull.kotlin-inline-logger:kotlin-inline-logger", version.ref = "logger" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
+kotlin-inline-logger = { module = "com.michael-bull.kotlin-inline-logger:kotlin-inline-logger", version.ref = "kotlin-inline-logger" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 netty-all = { module = "io.netty:netty-all", version.ref = "netty" }
