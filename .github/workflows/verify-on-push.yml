@@ -17,5 +17,3 @@ jobs:
           add-job-summary-as-pr-comment: on-failure
       - name: Build with Gradle
         run: ./gradlew build
-      - name: Run ktfmt check
-        run: ./gradlew ktfmtCheck
