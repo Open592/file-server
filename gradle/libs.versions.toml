@@ -5,6 +5,7 @@ junit = "5.11.0"
 kotlin = "2.0.20"
 ktfmt-gradle = "0.20.1"
 mockk = "1.13.12"
+netty = "4.1.113.Final"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -15,3 +16,4 @@ guice = { module = "com.google.inject:guice", version.ref = "guice" }
 jimfs = { module = "com.google.jimfs:jimfs", version.ref = "jimfs" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+netty-all = { module = "io.netty:netty-all", version.ref = "netty" }

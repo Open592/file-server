@@ -23,6 +23,7 @@ repositories {
 
 dependencies {
   implementation(libs.guice)
+  implementation(libs.netty.all)
 
   testImplementation(kotlin("test"))
   testImplementation(platform(libs.junit.bom))
