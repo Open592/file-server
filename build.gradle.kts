@@ -1,5 +1,17 @@
 plugins {
-    kotlin("jvm") version "2.0.10"
+  base
+  application
+  alias(libs.plugins.kotlin.jvm)
+
+  alias(libs.plugins.ktfmt.gradle)
+}
+
+application {
+  mainClass.set("com.open592.fileserver.cmd.Main")
+}
+
+kotlin {
+  jvmToolchain(21)
 }
 
 group = "com.open592"
