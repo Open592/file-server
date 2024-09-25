@@ -18,13 +18,20 @@ group = "com.open592"
 version = "1.0-SNAPSHOT"
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+  implementation(libs.guice)
+
+  testImplementation(kotlin("test"))
+  testImplementation(platform(libs.junit.bom))
+  testImplementation("org.junit.jupiter:junit-jupiter")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+  testImplementation(libs.mockk)
+  testImplementation(libs.jimfs)
 }
 
 tasks.test {
-    useJUnitPlatform()
+  useJUnitPlatform()
 }
