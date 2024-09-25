@@ -24,6 +24,7 @@ repositories {
 dependencies {
   implementation(libs.clikt)
   implementation(libs.guice)
+  implementation(libs.guava)
   implementation(libs.kotlin.inline.logger)
   runtimeOnly(libs.logback.classic)
   implementation(libs.netty.all)
