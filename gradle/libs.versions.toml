@@ -7,6 +7,7 @@ jimfs = "1.3.0"
 junit = "5.11.0"
 kotlin = "2.0.20"
 kotlin-inline-logger = "1.0.6"
+kotlinx-coroutines-core = "1.9.0"
 logback-classic = "1.5.8"
 ktfmt-gradle = "0.20.1"
 mockk = "1.13.12"
@@ -24,5 +25,6 @@ jimfs = { module = "com.google.jimfs:jimfs", version.ref = "jimfs" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
 kotlin-inline-logger = { module = "com.michael-bull.kotlin-inline-logger:kotlin-inline-logger", version.ref = "kotlin-inline-logger" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref="kotlinx-coroutines-core" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 netty-all = { module = "io.netty:netty-all", version.ref = "netty" }

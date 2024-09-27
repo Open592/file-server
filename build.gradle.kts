@@ -26,6 +26,7 @@ dependencies {
   implementation(libs.guice)
   implementation(libs.guava)
   implementation(libs.kotlin.inline.logger)
+  implementation(libs.kotlinx.coroutines.core)
   runtimeOnly(libs.logback.classic)
   implementation(libs.netty.all)
 
