@@ -5,6 +5,7 @@ import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import java.nio.file.FileSystem
 import java.nio.file.Files
+import java.nio.file.NoSuchFileException
 
 @Singleton
 class ServerConfiguration @Inject constructor(private val fileSystem: FileSystem) {
@@ -27,8 +28,10 @@ class ServerConfiguration @Inject constructor(private val fileSystem: FileSystem
   init {
     try {
       resolveConfigurationFile()
+    } catch (_: NoSuchFileException) {
+      logger.info { "No configuration file found. Proceeding with defaults." }
     } catch (_: Throwable) {
-      logger.error { "Failed to open configuration file. Proceeding with default values." }
+      logger.error { "Failed to open configuration file. Some values may be their defaults." }
     }
   }
 
@@ -50,49 +53,60 @@ class ServerConfiguration @Inject constructor(private val fileSystem: FileSystem
 
   private fun resolveConfigurationFile() {
     Files.newBufferedReader(fileSystem.getPath(DEFAULT_CONFIGURATION_PATH)).forEachLine { line ->
-      val (key, value) = line.split("=", limit = 2)
+      val (key, value) =
+          line.takeIf { !it.startsWith("#") }?.split("=", limit = 2)?.takeIf { it.size == 2 }
+              ?: return@forEachLine
+
       val configurationKey =
           ConfigurationKeys.entries.firstOrNull { it.value == key } ?: return@forEachLine
 
       when (configurationKey) {
-        ConfigurationKeys.CACHE_PATH -> setCachePath(value)
-        ConfigurationKeys.PRIMARY_PORT -> setPrimaryPort(value)
-        ConfigurationKeys.SECONDARY_PORT -> setSecondaryPort(value)
-        ConfigurationKeys.BUILD_NUMBER -> setBuildNumber(value)
+        ConfigurationKeys.CACHE_PATH -> setCachePathFromConfiguration(value)
+        ConfigurationKeys.PRIMARY_PORT -> setPrimaryPortFromConfiguration(value)
+        ConfigurationKeys.SECONDARY_PORT -> setSecondaryPortFromConfiguration(value)
+        ConfigurationKeys.BUILD_NUMBER -> setBuildNumberFromConfiguration(value)
       }
     }
   }
 
-  private fun setCachePath(path: String) {
+  private fun setCachePathFromConfiguration(path: String) {
+    if (path.isEmpty()) {
+      logger.error {
+        "Value for ${ConfigurationKeys.CACHE_PATH.value} is empty. Proceeding with default."
+      }
+
+      return
+    }
+
     configuration.cachePath = path
   }
 
-  private fun setPrimaryPort(port: String) {
+  private fun setPrimaryPortFromConfiguration(port: String) {
     try {
       configuration.primaryPort = port.toInt()
     } catch (_: NumberFormatException) {
       logger.error {
-        "Failed to parse ${ConfigurationKeys.PRIMARY_PORT.value}. Proceeding with default configuration value."
+        "Failed to parse ${ConfigurationKeys.PRIMARY_PORT.value}. Proceeding with default."
       }
     }
   }
 
-  private fun setSecondaryPort(port: String) {
+  private fun setSecondaryPortFromConfiguration(port: String) {
     try {
       configuration.secondaryPort = port.toInt()
     } catch (_: NumberFormatException) {
       logger.error {
-        "Failed to parse ${ConfigurationKeys.SECONDARY_PORT.value}. Proceeding with default configuration value."
+        "Failed to parse ${ConfigurationKeys.SECONDARY_PORT.value}. Proceeding with default."
       }
     }
   }
 
-  private fun setBuildNumber(buildNumber: String) {
+  private fun setBuildNumberFromConfiguration(buildNumber: String) {
     try {
       configuration.buildNumber = buildNumber.toInt()
     } catch (_: NumberFormatException) {
       logger.error {
-        "Failed to parse ${ConfigurationKeys.BUILD_NUMBER.value}. Proceeding with default configuration value."
+        "Failed to parse ${ConfigurationKeys.BUILD_NUMBER.value}. Proceeding with default."
       }
     }
   }
