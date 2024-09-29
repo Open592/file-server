@@ -10,10 +10,8 @@ object Main {
 
   @JvmStatic
   fun main(args: Array<String>) {
-    logger.info { "Hello world!" }
-
     val fileServer = Guice.createInjector(FileServerModule).getInstance(FileServer::class.java)
 
-    fileServer.start()
+    fileServer.start(System.currentTimeMillis())
   }
 }
