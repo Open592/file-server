@@ -1,25 +1,19 @@
 package com.open592.fileserver.cmd
 
-import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.main
 import com.github.michaelbull.logging.InlineLogger
 import com.google.inject.Guice
 import com.open592.fileserver.server.FileServer
 import com.open592.fileserver.server.FileServerModule
-import kotlinx.coroutines.runBlocking
 
-fun main(args: Array<String>): Unit = FileServerCommand().main(args)
+object Main {
+  private val logger = InlineLogger()
 
-class FileServerCommand : CliktCommand() {
-  override fun run() = runBlocking {
+  @JvmStatic
+  fun main(args: Array<String>) {
     logger.info { "Hello world!" }
 
     val fileServer = Guice.createInjector(FileServerModule).getInstance(FileServer::class.java)
 
     fileServer.start()
-  }
-
-  private companion object {
-    private val logger = InlineLogger()
   }
 }

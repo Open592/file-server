@@ -7,7 +7,7 @@ plugins {
 }
 
 application {
-  mainClass.set("com.open592.fileserver.cmd.FileServerCommandKt")
+  mainClass.set("com.open592.fileserver.cmd.Main")
 }
 
 kotlin {
@@ -22,7 +22,6 @@ repositories {
 }
 
 dependencies {
-  implementation(libs.clikt)
   implementation(libs.guice)
   implementation(libs.guava)
   implementation(libs.kotlin.inline.logger)
