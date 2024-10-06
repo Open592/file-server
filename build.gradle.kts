@@ -28,6 +28,7 @@ dependencies {
   implementation(libs.kotlinx.coroutines.core)
   runtimeOnly(libs.logback.classic)
   implementation(libs.netty.all)
+  implementation(libs.rs.cache.library)
 
   testImplementation(kotlin("test"))
   testImplementation(platform(libs.junit.bom))
