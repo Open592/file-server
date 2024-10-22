@@ -1,5 +1,6 @@
 package com.open592.fileserver.js5
 
+import com.github.michaelbull.logging.InlineLogger
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
@@ -9,12 +10,14 @@ import kotlin.math.min
 
 @ChannelHandler.Sharable
 object Js5ResponseEncoder : MessageToByteEncoder<Js5Response>(Js5Response::class.java) {
+  private val logger = InlineLogger()
+
   override fun encode(ctx: ChannelHandlerContext, msg: Js5Response, out: ByteBuf) {
     when (msg) {
       is Js5Response.Ok -> {
         out.writeByte(0)
       }
-      is Js5Response.Group -> encodeGroup(ctx, msg, out)
+      is Js5Response.Group -> encodeGroup(msg, out)
       is Js5Response.ClientOutOfDate -> {
         out.writeByte(6)
       }
@@ -39,9 +42,11 @@ object Js5ResponseEncoder : MessageToByteEncoder<Js5Response>(Js5Response::class
     }
   }
 
-  private fun encodeGroup(ctx: ChannelHandlerContext, msg: Js5Response.Group, out: ByteBuf) {
+  private fun encodeGroup(msg: Js5Response.Group, out: ByteBuf) {
+    logger.info { "Writing request - Group: ${msg.group} :: Archive: ${msg.archive}" }
+
     out.writeByte(msg.archive)
-    out.writeByte(msg.group)
+    out.writeShort(msg.group)
 
     if (!msg.data.isReadable) {
       throw EncoderException("Missing compression byte")

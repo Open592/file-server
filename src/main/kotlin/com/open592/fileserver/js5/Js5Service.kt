@@ -1,11 +1,14 @@
 package com.open592.fileserver.js5
 
 import com.displee.cache.CacheLibrary
+import com.github.michaelbull.logging.InlineLogger
 import com.google.common.util.concurrent.AbstractExecutionThreadService
+import com.open592.fileserver.buffer.use
 import com.open592.fileserver.collections.UniqueQueue
 import io.netty.buffer.ByteBufAllocator
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import kotlin.math.log
 
 @Singleton
 class Js5Service
@@ -58,18 +61,22 @@ constructor(
       return
     }
 
+    logger.info { "Processing request - Group: ${request.group} :: Archive: ${request.archive}" }
+
     val buf =
         if (request.archive == ARCHIVE_SET && request.group == ARCHIVE_SET) {
-          val sink = allocator.buffer()
-          val masterIndex = cacheLibrary.generateUkeys(false)
+          allocator.buffer().use { buffer ->
+            val masterIndex = cacheLibrary.generateUkeys(false)
 
-          sink.writeBytes(masterIndex)
+            buffer.writeBytes(masterIndex)
+          }
         } else {
           try {
-            val sink = allocator.buffer()
             val data = cacheLibrary.data(request.archive, request.group)
 
-            sink.writeBytes(data)
+            allocator.buffer().use { buffer ->
+              buffer.writeBytes(data)
+            }
           } catch (_: Exception) {
             context.close()
 
@@ -129,6 +136,7 @@ constructor(
   }
 
   private companion object {
+    private val logger = InlineLogger()
     private const val ARCHIVE_SET: Int = 255
   }
 }

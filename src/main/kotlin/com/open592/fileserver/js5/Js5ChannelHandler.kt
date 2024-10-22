@@ -27,8 +27,7 @@ constructor(
       is Js5Message.RequestGroup -> js5Service.push(client, message)
       is Js5Message.InitializeJs5RemoteConnection ->
           handleInitializeJs5RemoteConnection(ctx, message)
-      is Js5Message.InformClientReady -> handleInformClientReady(ctx)
-      is Js5Message.RequestConnectionDisconnect -> handleRequestConnectionDisconnect(ctx)
+      is Js5Message.RequestConnectionDisconnect -> ctx.close()
       else -> Unit
     }
   }
@@ -42,14 +41,6 @@ constructor(
     } else {
       ctx.write(Js5Response.Ok)
     }
-  }
-
-  private fun handleInformClientReady(ctx: ChannelHandlerContext) {
-    println("Hello world")
-  }
-
-  private fun handleRequestConnectionDisconnect(ctx: ChannelHandlerContext) {
-    ctx.close()
   }
 
   override fun channelWritabilityChanged(ctx: ChannelHandlerContext) {
