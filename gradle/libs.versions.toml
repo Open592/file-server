@@ -11,6 +11,7 @@ ktfmt-gradle = "0.20.1"
 logback-classic = "1.5.8"
 mockk = "1.13.12"
 netty = "4.1.113.Final"
+rs-cache-library = "7.1.8"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -26,3 +27,4 @@ kotlin-inline-logger = { module = "com.michael-bull.kotlin-inline-logger:kotlin-
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 netty-all = { module = "io.netty:netty-all", version.ref = "netty" }
+rs-cache-library = { module = "com.displee:rs-cache-library", version.ref = "rs-cache-library" }
