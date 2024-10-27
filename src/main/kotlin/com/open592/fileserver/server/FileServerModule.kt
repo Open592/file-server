@@ -7,6 +7,7 @@ import com.open592.fileserver.buffer.BufferModule
 import com.open592.fileserver.cache.CacheModule
 import com.open592.fileserver.configuration.ServerConfigurationModule
 import com.open592.fileserver.net.NetworkService
+import com.open592.fileserver.net.js5.Js5Service
 
 object FileServerModule : AbstractModule() {
   override fun configure() {
@@ -16,5 +17,6 @@ object FileServerModule : AbstractModule() {
 
     val binder = Multibinder.newSetBinder(binder(), Service::class.java)
     binder.addBinding().to(NetworkService::class.java)
+    binder.addBinding().to(Js5Service::class.java)
   }
 }
