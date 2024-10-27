@@ -1,15 +1,16 @@
-package com.open592.fileserver.net.js5
+package com.open592.fileserver.protocol.inbound
 
 import com.github.michaelbull.logging.InlineLogger
 import com.open592.fileserver.configuration.ServerConfiguration
-import com.open592.fileserver.protocol.inbound.Js5InboundMessage
+import com.open592.fileserver.net.js5.Js5Client
+import com.open592.fileserver.net.js5.Js5Service
 import com.open592.fileserver.protocol.outbound.Js5OutboundMessage
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import io.netty.handler.timeout.IdleStateEvent
 import jakarta.inject.Inject
 
-class Js5ChannelHandler
+class Js5InboundChannelHandler
 @Inject
 constructor(
     private val service: Js5Service,

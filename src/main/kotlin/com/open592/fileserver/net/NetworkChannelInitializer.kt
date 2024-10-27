@@ -1,7 +1,7 @@
 package com.open592.fileserver.net
 
 import com.github.michaelbull.logging.InlineLogger
-import com.open592.fileserver.net.js5.Js5ChannelHandler
+import com.open592.fileserver.protocol.inbound.Js5InboundChannelHandler
 import com.open592.fileserver.protocol.inbound.Js5InboundMessageDecoder
 import com.open592.fileserver.protocol.outbound.Js5ClientIsOutOfDateMessageEncoder
 import com.open592.fileserver.protocol.outbound.Js5GroupMessageEncoder
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 @Singleton
 class NetworkChannelInitializer
 @Inject
-constructor(private val handlerProvider: Provider<Js5ChannelHandler>) :
+constructor(private val js5InboundChannelHandler: Provider<Js5InboundChannelHandler>) :
     ChannelInitializer<Channel>() {
   override fun initChannel(channel: Channel) {
     channel
@@ -34,7 +34,7 @@ constructor(private val handlerProvider: Provider<Js5ChannelHandler>) :
             Js5ClientIsOutOfDateMessageEncoder(),
             Js5ServerFullMessageEncoder(),
             Js5IpLimitMessageEncoder(),
-            handlerProvider.get(),
+            js5InboundChannelHandler.get(),
         )
   }
 
