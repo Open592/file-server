@@ -4,7 +4,7 @@ import com.github.michaelbull.logging.InlineLogger
 import com.open592.fileserver.configuration.ServerConfiguration
 import com.open592.fileserver.net.js5.Js5Client
 import com.open592.fileserver.net.js5.Js5Service
-import com.open592.fileserver.protocol.outbound.Js5OutboundMessage
+import com.open592.fileserver.protocol.outbound.Js5OutboundStatusMessage
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import io.netty.handler.timeout.IdleStateEvent
@@ -38,9 +38,9 @@ constructor(
       message: Js5InboundMessage.InitializeJs5RemoteConnection
   ) {
     if (message.build != serverConfiguration.getBuildNumber()) {
-      ctx.write(Js5OutboundMessage.ClientIsOutOfDate)
+      ctx.write(Js5OutboundStatusMessage.ClientIsOutOfDate)
     } else {
-      ctx.write(Js5OutboundMessage.Ok)
+      ctx.write(Js5OutboundStatusMessage.Ok)
     }
   }
 

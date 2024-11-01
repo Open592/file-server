@@ -8,11 +8,11 @@ import io.netty.handler.codec.MessageToByteEncoder
 import kotlin.math.min
 
 @ChannelHandler.Sharable
-class Js5GroupMessageEncoder :
-    MessageToByteEncoder<Js5OutboundMessage.Group>(Js5OutboundMessage.Group::class.java) {
+class Js5OutboundGroupMessageEncoder :
+    MessageToByteEncoder<Js5OutboundGroupMessage>(Js5OutboundGroupMessage::class.java) {
   override fun encode(
       ctx: ChannelHandlerContext,
-      message: Js5OutboundMessage.Group,
+      message: Js5OutboundGroupMessage,
       output: ByteBuf
   ) {
     output.writeByte(message.archive)
@@ -40,7 +40,7 @@ class Js5GroupMessageEncoder :
 
   override fun allocateBuffer(
       ctx: ChannelHandlerContext,
-      message: Js5OutboundMessage.Group,
+      message: Js5OutboundGroupMessage,
       preferDirect: Boolean
   ): ByteBuf {
     val dataLength = message.data.readableBytes()

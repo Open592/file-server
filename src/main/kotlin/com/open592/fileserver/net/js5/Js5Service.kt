@@ -8,7 +8,7 @@ import com.google.common.util.concurrent.AbstractExecutionThreadService
 import com.open592.fileserver.buffer.use
 import com.open592.fileserver.collections.UniqueQueue
 import com.open592.fileserver.protocol.inbound.Js5InboundMessage
-import com.open592.fileserver.protocol.outbound.Js5OutboundMessage
+import com.open592.fileserver.protocol.outbound.Js5OutboundGroupMessage
 import io.netty.buffer.ByteBufAllocator
 import jakarta.inject.Inject
 
@@ -45,6 +45,8 @@ constructor(
           break
         }
       }
+
+      serve(client, request)
     }
   }
 
@@ -74,7 +76,7 @@ constructor(
         }
 
     val response =
-        Js5OutboundMessage.Group(request.isPrefetch, request.archive, request.group, data = buf)
+        Js5OutboundGroupMessage(request.isPrefetch, request.archive, request.group, data = buf)
 
     ctx.writeAndFlush(response)
 
