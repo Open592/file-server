@@ -17,6 +17,10 @@ class UniqueQueue<T> {
     return false
   }
 
+  operator fun plusAssign(value: T) {
+    add(value)
+  }
+
   fun removeFirstOrNull(): T? {
     val value = queue.removeFirstOrNull()
 
