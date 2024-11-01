@@ -11,7 +11,9 @@ import com.open592.fileserver.protocol.inbound.Js5InboundMessage
 import com.open592.fileserver.protocol.outbound.Js5OutboundGroupMessage
 import io.netty.buffer.ByteBufAllocator
 import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
+@Singleton
 class Js5Service
 @Inject
 constructor(
@@ -78,7 +80,7 @@ constructor(
     val response =
         Js5OutboundGroupMessage(request.isPrefetch, request.archive, request.group, data = buf)
 
-    ctx.writeAndFlush(response)
+    ctx.writeAndFlush(response, ctx.voidPromise())
 
     synchronized(lock) {
       if (client.isReady()) {
