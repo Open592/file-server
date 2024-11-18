@@ -3,7 +3,6 @@ package com.open592.fileserver.server
 import com.github.michaelbull.logging.InlineLogger
 import com.google.common.util.concurrent.Service
 import com.google.common.util.concurrent.ServiceManager
-import com.open592.fileserver.configuration.ServerConfiguration
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 
@@ -12,7 +11,6 @@ class FileServer
 @Inject
 constructor(
     services: Set<Service>,
-    private val serverConfiguration: ServerConfiguration,
 ) {
   private val serviceManager = ServiceManager(services)
 
