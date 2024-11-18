@@ -4,6 +4,7 @@ import com.displee.cache.CacheLibrary
 import com.displee.compress.CompressionType
 import com.displee.compress.compress
 import com.displee.compress.type.EmptyCompressor
+import com.github.michaelbull.logging.InlineLogger
 import com.google.common.util.concurrent.AbstractExecutionThreadService
 import com.open592.fileserver.buffer.use
 import com.open592.fileserver.collections.UniqueQueue
@@ -70,9 +71,14 @@ constructor(
           }
         } else {
           allocator.buffer().use { buffer ->
-            val data = cacheLibrary.data(request.group, request.archive)
+            val archiveSector =
+                if (request.group == 255) {
+                  cacheLibrary.index255?.readArchiveSector(request.archive)
+                } else {
+                  cacheLibrary.index(request.group).readArchiveSector(request.archive)
+                } ?: return
 
-            buffer.writeBytes(data)
+            buffer.writeBytes(archiveSector.data)
             buffer.retain()
           }
         }
@@ -131,5 +137,6 @@ constructor(
 
   private companion object {
     private const val ARCHIVE_SET = 255
+    private val logger = InlineLogger()
   }
 }
