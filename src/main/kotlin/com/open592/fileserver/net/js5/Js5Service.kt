@@ -78,7 +78,7 @@ constructor(
                   cacheLibrary.index(request.group).readArchiveSector(request.archive)
                 } ?: return
 
-            buffer.writeBytes(archiveSector.data)
+            buffer.writeBytes(archiveSector.data.compress(CompressionType.NONE, EmptyCompressor))
             buffer.retain()
           }
         }
