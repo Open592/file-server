@@ -36,7 +36,7 @@ class Js5InboundMessageDecoder : ByteToMessageDecoder() {
       isPrefetch: Boolean
   ): Js5InboundMessage.RequestGroup {
     val archive = input.readUnsignedByte().toInt()
-    val group = input.readUnsignedShort().toInt()
+    val group = input.readUnsignedShort()
 
     return Js5InboundMessage.RequestGroup(archive, group, isPrefetch)
   }
@@ -72,6 +72,8 @@ class Js5InboundMessageDecoder : ByteToMessageDecoder() {
       input: ByteBuf
   ): Js5InboundMessage.ExchangeObfuscationKey {
     val key = input.readUnsignedByte().toInt()
+
+    input.skipBytes(2)
 
     return Js5InboundMessage.ExchangeObfuscationKey(key)
   }

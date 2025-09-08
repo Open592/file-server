@@ -22,19 +22,20 @@ class Js5OutboundGroupMessageEncoder :
       throw EncoderException("Missing compression byte")
     }
 
-    var compression = message.data.readUnsignedByte().toInt()
+    // Initialize flags with the compression byte from the data buffer
+    var flags = message.data.readUnsignedByte().toInt()
 
     if (message.isPrefetch) {
-      compression = compression or 0x80
+      flags = flags or 0x80
     }
 
-    output.writeByte(compression)
+    output.writeByte(flags)
 
-    output.writeBytes(message.data, min(message.data.readableBytes(), 508))
+    output.writeBytes(message.data, min(message.data.readableBytes(), BLOCK_SIZE - HEADER_SIZE))
 
     while (message.data.isReadable) {
       output.writeByte(0xFF)
-      output.writeBytes(message.data, min(message.data.readableBytes(), 511))
+      output.writeBytes(message.data, min(message.data.readableBytes(), BLOCK_SIZE - 1))
     }
   }
 
@@ -44,12 +45,17 @@ class Js5OutboundGroupMessageEncoder :
       preferDirect: Boolean
   ): ByteBuf {
     val dataLength = message.data.readableBytes()
-    val bufferLength = 2 + dataLength + (512 + dataLength) / 511
+    val bufferLength = 2 + dataLength + (BLOCK_SIZE + dataLength) / 511
 
     return if (preferDirect) {
       ctx.alloc().ioBuffer(bufferLength, bufferLength)
     } else {
       ctx.alloc().heapBuffer(bufferLength, bufferLength)
     }
+  }
+
+  private companion object {
+    private const val HEADER_SIZE = 4
+    private const val BLOCK_SIZE = 512
   }
 }

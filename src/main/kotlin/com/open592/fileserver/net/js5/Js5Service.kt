@@ -72,10 +72,10 @@ constructor(
         } else {
           allocator.buffer().use { buffer ->
             val archiveSector =
-                if (request.group == 255) {
-                  cacheLibrary.index255?.readArchiveSector(request.archive)
+                if (request.archive == ARCHIVE_SET) {
+                  cacheLibrary.index255?.readArchiveSector(request.group)
                 } else {
-                  cacheLibrary.index(request.group).readArchiveSector(request.archive)
+                  cacheLibrary.index(request.archive).readArchiveSector(request.group)
                 } ?: return
 
             buffer.writeBytes(archiveSector.data)

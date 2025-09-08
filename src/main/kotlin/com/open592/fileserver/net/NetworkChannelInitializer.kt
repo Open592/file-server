@@ -5,8 +5,8 @@ import com.open592.fileserver.protocol.inbound.Js5InboundChannelHandler
 import com.open592.fileserver.protocol.inbound.Js5InboundMessageDecoder
 import com.open592.fileserver.protocol.outbound.Js5OutboundGroupMessageEncoder
 import com.open592.fileserver.protocol.outbound.Js5OutboundStatusMessageEncoder
+import com.open592.fileserver.protocol.outbound.XorEncoder
 import io.netty.channel.Channel
-import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInitializer
 import io.netty.handler.timeout.IdleStateHandler
 import jakarta.inject.Inject
@@ -25,15 +25,13 @@ constructor(private val js5InboundChannelHandler: Provider<Js5InboundChannelHand
         .addLast(
             IdleStateHandler(
                 true, TIMEOUT_SECONDS, TIMEOUT_SECONDS, TIMEOUT_SECONDS, TimeUnit.SECONDS),
+            XorEncoder(),
             Js5InboundMessageDecoder(),
             Js5OutboundStatusMessageEncoder(),
             Js5OutboundGroupMessageEncoder(),
             js5InboundChannelHandler.get(),
+            ExceptionHandler(),
         )
-  }
-
-  override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
-    logger.error { "Caught exception: ${cause.message}" }
   }
 
   private companion object {
