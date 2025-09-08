@@ -5,6 +5,7 @@ import com.open592.fileserver.configuration.ServerConfiguration
 import com.open592.fileserver.net.js5.Js5Client
 import com.open592.fileserver.net.js5.Js5Service
 import com.open592.fileserver.protocol.outbound.Js5OutboundStatusMessage
+import com.open592.fileserver.protocol.outbound.XorEncoder
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import io.netty.handler.timeout.IdleStateEvent
@@ -27,7 +28,7 @@ constructor(
       is Js5InboundMessage.InitializeJs5RemoteConnection ->
           handleInitializeJs5RemoteConnection(ctx, message)
       is Js5InboundMessage.RequestGroup -> service.push(client, message)
-      is Js5InboundMessage.ExchangeObfuscationKey -> handleExchangeObfuscationKey(message)
+      is Js5InboundMessage.ExchangeObfuscationKey -> handleExchangeObfuscationKey(ctx, message)
       is Js5InboundMessage.RequestConnectionDisconnect -> ctx.close()
       else -> Unit
     }
@@ -44,8 +45,15 @@ constructor(
     }
   }
 
-  private fun handleExchangeObfuscationKey(message: Js5InboundMessage.ExchangeObfuscationKey) {
-    logger.info { "Handle Exchange Obfuscation Key with value = ${message.key}" }
+  private fun handleExchangeObfuscationKey(
+      ctx: ChannelHandlerContext,
+      message: Js5InboundMessage.ExchangeObfuscationKey
+  ) {
+    val encoder = ctx.pipeline().get(XorEncoder::class.java)
+
+    encoder.key = message.key
+
+    logger.info { "Setting key ${message.key}" }
   }
 
   override fun channelReadComplete(ctx: ChannelHandlerContext) {
